@@ -64,13 +64,13 @@ public abstract class WFChunkDataPacketMixin {
         }
         if (dewIt) {
             if (!chunk.getWorld().getChunkManager().isChunkLoaded(x, z)) {
-                System.out.println("Not loaded!");
+                ServerMain.LOGGER.info("Not loaded!");
                 WorldChunk fakeChunk = new EmptyChunk(chunk.getWorld(), chunk.getPos(), null);
                 this.chunkData = new ChunkData(fakeChunk);
                 this.lightData = new LightData(fakeChunk.getPos(), lightProvider, skyBits, blockBits, nonEdge);
                 return;
             }
-            System.out.println("Loaded!!!");
+            ServerMain.LOGGER.info("Loaded!!!");
             WorldChunk fakeChunk = chunk.getWorld().getChunk(x, z);
             this.chunkData = new ChunkData(fakeChunk);
             this.lightData = new LightData(fakeChunk.getPos(), lightProvider, skyBits, blockBits, nonEdge);

@@ -28,7 +28,7 @@ import java.util.*;
 
 public class ServerMain implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("WF:Server");
-    public static int range = 9;
+    public static int range = 16;
     // seed: -1998017228203478098
 
     @Override
