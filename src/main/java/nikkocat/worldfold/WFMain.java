@@ -6,11 +6,9 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.dedicated.AbstractPropertiesHandler;
-import net.minecraft.server.dedicated.ServerPropertiesHandler;
-import net.minecraft.server.dedicated.ServerPropertiesLoader;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
@@ -23,17 +21,16 @@ import net.minecraft.world.chunk.WorldChunk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Paths;
 import java.util.*;
 
-public class ServerMain implements ModInitializer {
-    public static final Logger LOGGER = LoggerFactory.getLogger("WF:Server");
+public class WFMain implements ModInitializer {
+    public static final Logger LOGGER = LoggerFactory.getLogger("WorldFold"); // WF:Server
     public static int range = 16;
     // seed: -1998017228203478098
 
     @Override
     public void onInitialize() {
-        LOGGER.info("This is World Fold. Key words: worldfold, messages begin with (WF:Module)");
+//        LOGGER.info("This is World Fold. Key words: worldfold, messages begin with (WF:Module)");
         CommandRegistrationCallback.EVENT.register(CommandTree::registerCommands);
         ServerWorldEvents.LOAD.register(this::onWorldLoad);
         ServerTickEvents.START_WORLD_TICK.register(this::onTickBegin);
@@ -58,35 +55,34 @@ public class ServerMain implements ModInitializer {
     }
 
     private void onTickBegin(ServerWorld world) {
+        int blockRange = range << 4;
 
-        List<ServerPlayerEntity> playerList = world.getPlayers();
-        for (int i = 0; i < playerList.size(); i++) {
-            ServerPlayerEntity player = playerList.get(i);
+        for (ServerPlayerEntity entity : world.getPlayers()) {
+            double x = entity.getX();
+            double y = entity.getY();
+            double z = entity.getZ();
 
-            int blockRange = range << 4;
-            double x = player.getX();
-            double y = player.getY();
-            double z = player.getZ();
             if (x >= blockRange + 16) {
-                tpPlayerMovement(world, player, x - (blockRange << 1) - 16, y, z);
+                tpPlayerMovement(world, entity, x - (blockRange << 1) - 16, y, z);
             } else if (x <= -blockRange) {
-                tpPlayerMovement(world, player, x + (blockRange << 1) + 16, y, z);
+                tpPlayerMovement(world, entity, x + (blockRange << 1) + 16, y, z);
             } else if (z >= blockRange + 16) {
-                tpPlayerMovement(world, player, x, y, z - (blockRange << 1) - 16);
+                tpPlayerMovement(world, entity, x, y, z - (blockRange << 1) - 16);
             } else if (z <= -blockRange) {
-                tpPlayerMovement(world, player, x, y, z + (blockRange << 1) + 16);
+                tpPlayerMovement(world, entity, x, y, z + (blockRange << 1) + 16);
             }
         }
     }
+
 
     private void onWorldLoad(MinecraftServer server, ServerWorld world) {
         LOGGER.info("World loaded: " + world.getRegistryKey().getValue().toString());
     }
 
-    private void tpPlayerMovement(ServerWorld world, ServerPlayerEntity player, double x, double y, double z) {
+    private void tpPlayerMovement(ServerWorld world, Entity entity, double x, double y, double z) {
         ChunkPos chunkPos = new ChunkPos(new BlockPos(x, y, z));
-        float f = MathHelper.wrapDegrees(player.getYaw());
-        float g = MathHelper.wrapDegrees(player.getPitch());
+        float f = MathHelper.wrapDegrees(entity.getYaw());
+        float g = MathHelper.wrapDegrees(entity.getPitch());
         Set<PlayerPositionLookS2CPacket.Flag> mvFlags = EnumSet.of(
                 PlayerPositionLookS2CPacket.Flag.X,
                 PlayerPositionLookS2CPacket.Flag.Y,
@@ -95,9 +91,25 @@ public class ServerMain implements ModInitializer {
                 PlayerPositionLookS2CPacket.Flag.Y_ROT
         );
         // fallback TP ticket
-        world.getChunkManager().addTicket(ChunkTicketType.POST_TELEPORT, chunkPos, 1, player.getId());
-        player.networkHandler.requestTeleport(x, y, z, f, g, mvFlags);
-        player.setHeadYaw(f);
-        //world.getServer().getPlayerManager().getSimulationDistance();
+        world.getChunkManager().addTicket(ChunkTicketType.POST_TELEPORT, chunkPos, 1, entity.getId());
+        // check if player is riding something
+        if (entity.getVehicle() != null) {
+            entity.getVehicle().requestTeleport(x, y, z);
+        }
+        if (entity instanceof ServerPlayerEntity player) {
+            // TODO make it fake tp
+            player.networkHandler.requestTeleport(x, y, z, f, g, mvFlags, false);
+
+//            player.setPos(x, y, z);
+//            player.networkHandler.requestTeleport(
+//                    x,
+//                    y,
+//                    z,
+//                    f,
+//                    g
+//            );
+//            player.networkHandler.syncWithPlayerPosition();
+
+        }
     }
 }

@@ -16,7 +16,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"nikkocat.worldfold.ServerMain"
+          "nikkocat.worldfold.WFMain"
+		],
+		"preLaunch": [
+			"nikkocat.worldfold.WFPre"
 		]
 	},
 	"mixins": [

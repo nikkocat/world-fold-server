@@ -3,9 +3,12 @@
   "package": "nikkocat.worldfold.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ServerPlayerEntityMixin",
-    "WFChunkDataPacketMixin",
-    "WFChunkTicketManagerMixin"
+    "ChunkDataPacketMixin",
+    "ChunkGeneratorMixin",
+    "ChunkStatusMixin",
+    "ChunkTicketManagerMixin",
+    "ConfiguredCarverMixin",
+    "NoiseChunkGeneratorMixin"
   ],
   "injectors": {
     "defaultRequire": 1

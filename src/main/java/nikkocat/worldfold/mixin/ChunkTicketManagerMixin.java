@@ -9,7 +9,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.world.SimulationDistanceLevelPropagator;
-import nikkocat.worldfold.ServerMain;
+import nikkocat.worldfold.WFMain;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ChunkTicketManager.class)
-public abstract class WFChunkTicketManagerMixin {
+public abstract class ChunkTicketManagerMixin {
     @Shadow @Final private SimulationDistanceLevelPropagator simulationDistanceTracker;
     @Shadow protected abstract int getPlayerSimulationLevel();
     @Shadow @Final private ChunkTicketManager.NearbyChunkTicketUpdater nearbyChunkTicketUpdater;
@@ -29,49 +29,23 @@ public abstract class WFChunkTicketManagerMixin {
     // Modify var
     // Modify const
 
-    private int range = ServerMain.range;
-    private void handleOffsetEnter(int x, int z, ServerPlayerEntity player) {
-        ServerWorld world = player.getWorld();
-        // +1 on the radius to fix border loading, idk why it works
-        int radius = 33 - getPlayerSimulationLevel() + 1;
-        int bound = range - radius;
-        int offset = (range << 1) + 1;
-        int offsetX = x;
-        int offsetZ = z;
-        boolean crossX = false;
-        boolean crossZ = false;
-        if (x > bound) {
-            crossX = true;
-            offsetX -= offset;
-            ticketAdder(world, radius, offsetX, offsetZ);
-        }
-        if (x < -bound) {
-            crossX = true;
-            offsetX += offset;
-            ticketAdder(world, radius, offsetX, offsetZ);
-        }
-        if (z > bound) {
-            crossZ = true;
-            offsetZ -= offset;
-            ticketAdder(world, radius, offsetX, offsetZ);
-        }
-        if (z < -bound) {
-            crossZ = true;
-            offsetZ += offset;
-            ticketAdder(world, radius, offsetX, offsetZ);
-        }
-        if (crossX && crossZ) {
-            ticketAdder(world, radius, offsetX, offsetZ);
-        }
-    }
+    private final int range = WFMain.range;
 
     private static void ticketAdder(ServerWorld world, int radius, int offsetX, int offsetZ) {
         ChunkPos offsetPos = new ChunkPos(offsetX, offsetZ);
         world.getChunkManager().addTicket(ChunkTicketType.PLAYER, offsetPos, radius, offsetPos);
-        System.out.println("ADD: ["+offsetX+", "+offsetZ+"]");
+        WFMain.LOGGER.info("ADD: ["+offsetX+", "+offsetZ+"]");
+    }
+
+    private void handleOffsetEnter(int x, int z, ServerPlayerEntity player) {
+        handleOffset(x, z, player, true);
     }
 
     private void handleOffsetLeave(int x, int z, ServerPlayerEntity player) {
+        handleOffset(x, z, player, false);
+    }
+
+    private void handleOffset(int x, int z, ServerPlayerEntity player, boolean enter) {
         ServerWorld world = player.getWorld();
         int radius = 33 - getPlayerSimulationLevel();
         int bound = range - radius;
@@ -80,35 +54,37 @@ public abstract class WFChunkTicketManagerMixin {
         int offsetZ = z;
         boolean crossX = false;
         boolean crossZ = false;
+
         if (x > bound) {
             crossX = true;
             offsetX -= offset;
-            ticketRemover(world, radius, offsetX, offsetZ);
-        }
-        if (x < -bound) {
+        } else if (x < -bound) {
             crossX = true;
             offsetX += offset;
-            ticketRemover(world, radius, offsetX, offsetZ);
         }
+
         if (z > bound) {
             crossZ = true;
             offsetZ -= offset;
-            ticketRemover(world, radius, offsetX, offsetZ);
-        }
-        if (z < -bound) {
+        } else if (z < -bound) {
             crossZ = true;
             offsetZ += offset;
-            ticketRemover(world, radius, offsetX, offsetZ);
         }
-        if (crossX && crossZ) {
-            ticketRemover(world, radius, offsetX, offsetZ);
+
+        if (crossX || crossZ) {
+            if (enter) {
+                ticketAdder(world, radius + 1, offsetX, offsetZ);
+            } else {
+                ticketRemover(world, radius, offsetX, offsetZ);
+            }
         }
     }
+
 
     private static void ticketRemover(ServerWorld world, int radius, int offsetX, int offsetZ) {
         ChunkPos offsetPos = new ChunkPos(offsetX, offsetZ);
         world.getChunkManager().removeTicket(ChunkTicketType.PLAYER, offsetPos, radius, offsetPos);
-        System.out.println("REMOVE: ["+offsetX+", "+offsetZ+"]");
+        WFMain.LOGGER.info("REMOVE: ["+offsetX+", "+offsetZ+"]");
     }
 
     @Inject(at = @At("HEAD"), method = "handleChunkEnter")
