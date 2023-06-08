@@ -46,7 +46,7 @@ public abstract class ChunkTicketManagerMixin {
     }
 
     private void handleOffset(int x, int z, ServerPlayerEntity player, boolean enter) {
-        ServerWorld world = player.getWorld();
+        ServerWorld world = (ServerWorld) player.getWorld();
         int radius = 33 - getPlayerSimulationLevel();
         int bound = range - radius;
         int offset = (range << 1) + 1;

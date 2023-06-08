@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketType;
@@ -80,15 +81,15 @@ public class WFMain implements ModInitializer {
     }
 
     private void tpPlayerMovement(ServerWorld world, Entity entity, double x, double y, double z) {
-        ChunkPos chunkPos = new ChunkPos(new BlockPos(x, y, z));
+        ChunkPos chunkPos = new ChunkPos(new BlockPos((int) x, (int) y, (int) z));
         float f = MathHelper.wrapDegrees(entity.getYaw());
         float g = MathHelper.wrapDegrees(entity.getPitch());
-        Set<PlayerPositionLookS2CPacket.Flag> mvFlags = EnumSet.of(
-                PlayerPositionLookS2CPacket.Flag.X,
-                PlayerPositionLookS2CPacket.Flag.Y,
-                PlayerPositionLookS2CPacket.Flag.Z,
-                PlayerPositionLookS2CPacket.Flag.X_ROT,
-                PlayerPositionLookS2CPacket.Flag.Y_ROT
+        Set<PositionFlag> mvFlags = EnumSet.of(
+                PositionFlag.X,
+                PositionFlag.Y,
+                PositionFlag.Z,
+                PositionFlag.X_ROT,
+                PositionFlag.Y_ROT
         );
         // fallback TP ticket
         world.getChunkManager().addTicket(ChunkTicketType.POST_TELEPORT, chunkPos, 1, entity.getId());
@@ -98,7 +99,7 @@ public class WFMain implements ModInitializer {
         }
         if (entity instanceof ServerPlayerEntity player) {
             // TODO make it fake tp
-            player.networkHandler.requestTeleport(x, y, z, f, g, mvFlags, false);
+            player.networkHandler.requestTeleport(x, y, z, f, g, mvFlags);
 
 //            player.setPos(x, y, z);
 //            player.networkHandler.requestTeleport(

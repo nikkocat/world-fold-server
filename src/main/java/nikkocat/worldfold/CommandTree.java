@@ -15,7 +15,7 @@ public class CommandTree {
                                         CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("worldfold").requires(source -> source.hasPermissionLevel(4))
                 .executes(ctx -> {
-                    ctx.getSource().sendFeedback(Text.literal("WorldFold v1.0.0"), false);
+                    ctx.getSource().sendFeedback(() -> Text.literal("WorldFold v1.0.0"), false);
                     return 1;
                 })
                 .then(literal("add")

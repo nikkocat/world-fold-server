@@ -35,8 +35,8 @@ public abstract class ChunkDataPacketMixin {
     //        shift = At.Shift.AFTER),
     //        shift = At.Shift.BY, by = 2),
     //        method = "<init>(Lnet/minecraft/world/chunk/WorldChunk;Lnet/minecraft/world/chunk/light/LightingProvider;Ljava/util/BitSet;Ljava/util/BitSet;Z)V")
-    @Inject(at = @At(value = "TAIL"), method = "<init>(Lnet/minecraft/world/chunk/WorldChunk;Lnet/minecraft/world/chunk/light/LightingProvider;Ljava/util/BitSet;Ljava/util/BitSet;Z)V")
-    private void initFake1(@NotNull WorldChunk chunk, LightingProvider lightProvider, BitSet skyBits, BitSet blockBits, boolean nonEdge, CallbackInfo ci) {
+    @Inject(at = @At(value = "TAIL"), method = "<init>(Lnet/minecraft/world/chunk/WorldChunk;Lnet/minecraft/world/chunk/light/LightingProvider;Ljava/util/BitSet;Ljava/util/BitSet;)V")
+    private void initFake1(WorldChunk chunk, LightingProvider lightProvider, BitSet skyBits, BitSet blockBits, CallbackInfo ci) {
         int x = chunk.getPos().x;
         int z = chunk.getPos().z;
         boolean dewIt = false;
@@ -68,14 +68,14 @@ public abstract class ChunkDataPacketMixin {
 //                    ServerMain.LOGGER.info("Not loaded!");
                     WorldChunk fakeChunk = new EmptyChunk(chunk.getWorld(), chunk.getPos(), null);
                     this.chunkData = new ChunkData(fakeChunk);
-                    this.lightData = new LightData(fakeChunk.getPos(), lightProvider, skyBits, blockBits, nonEdge);
+                    this.lightData = new LightData(fakeChunk.getPos(), lightProvider, skyBits, blockBits);
                     return;
                 }
             }
 //            ServerMain.LOGGER.info("Loaded!!!");
             WorldChunk fakeChunk = chunk.getWorld().getChunk(x, z);
             this.chunkData = new ChunkData(fakeChunk);
-            this.lightData = new LightData(fakeChunk.getPos(), lightProvider, skyBits, blockBits, nonEdge);
+            this.lightData = new LightData(fakeChunk.getPos(), lightProvider, skyBits, blockBits);
         }
     }
 }

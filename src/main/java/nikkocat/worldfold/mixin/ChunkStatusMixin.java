@@ -24,7 +24,7 @@ public class ChunkStatusMixin {
      * Injects into the "NOISE" generator.
      */
     @Inject(method = "method_38284", at = @At(value = "HEAD"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private static void NOISE(ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureTemplateManager structureTemplateManager, ServerLightingProvider lightingProvider, Function fullChunkConverter, List chunks, Chunk chunk, boolean regenerate, CallbackInfoReturnable<CompletableFuture> cir) {
+    private static void NOISE(ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureTemplateManager structureTemplateManager, ServerLightingProvider lightingProvider, Function fullChunkConverter, List chunks, Chunk chunk, CallbackInfoReturnable<CompletableFuture> cir) {
         ((ChunkGeneratorAccess) generator).setWorld(world);
     }
 }
