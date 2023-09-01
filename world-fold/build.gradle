@@ -7,12 +7,13 @@ repositories {
 }
 
 dependencies {
-    // MixinExtras.
+    // MixinExtras
     include(implementation("com.github.LlamaLad7:MixinExtras:${project.mixin_extras}"))
     annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras}")
 
     // Run PacketLogger with FoldWorld
-    modRuntimeOnly(project(path: ":packet-logger", configuration: "namedElements"))
+    // TODO: fix this, as it works but break builds
+//    modCompileOnly(project(path: ":packet-logger", configuration: "namedElements"))
 }
 
 loom {

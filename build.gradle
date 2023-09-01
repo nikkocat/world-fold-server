@@ -1,26 +1,8 @@
 plugins {
-	id 'fabric-loom' version '1.3-SNAPSHOT'
+	id 'fabric-loom' version '1.3-SNAPSHOT' apply false
 	id 'java'
 	id 'maven-publish'
-	id 'io.github.juuxel.loom-vineflower' version '1.11.0'
-}
-
-tasks.build.enabled = false
-tasks.assemble.enabled = false
-tasks.jar.enabled = false
-tasks.remapJar.enabled = false
-
-dependencies {
-	// Needed for loom
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-}
-
-loom {
-	runConfigs.configureEach {
-		ideConfigGenerated = false
-	}
+	id 'io.github.juuxel.loom-vineflower' version '1.11.0' apply false
 }
 
 subprojects {
@@ -42,10 +24,11 @@ subprojects {
 		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-		// Fabric API. This is technically optional, but you probably want it anyway.
+
+		// Fabric api
 		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
 
-		// Auth in dev
+		// Auth in dev env
 		modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${project.dev_auth}")
 	}
 
@@ -76,15 +59,12 @@ subprojects {
 	}
 
 	java {
-		// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-		// if it is present.
-		// If you remove this line, sources will not be generated.
 		withSourcesJar()
 	}
 
 	jar {
 		from("LICENSE") {
-			rename { "${it}_${project.archivesBaseName}"}
+			rename { "${it}_${project.archives_base_name}"}
 		}
 	}
 
