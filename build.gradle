@@ -13,6 +13,7 @@ subprojects {
 
 	repositories {
 		maven { url "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
+		maven { url "https://jitpack.io" }
 	}
 
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -23,7 +24,6 @@ subprojects {
 		minecraft "com.mojang:minecraft:${project.minecraft_version}"
 		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
 
 		// Fabric api
 		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"

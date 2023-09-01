@@ -1,0 +1,13 @@
+archivesBaseName = "tools"
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'https://maven.wispforest.io' }
+}
+
+dependencies {
+    // Gadget (debugging stuff)
+    modLocalRuntime "io.wispforest:gadget:${project.gadget_version}"
+}

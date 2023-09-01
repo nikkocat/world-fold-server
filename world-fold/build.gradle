@@ -2,18 +2,15 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-repositories {
-    maven { url "https://jitpack.io" }
-}
-
 dependencies {
     // MixinExtras
     include(implementation("com.github.LlamaLad7:MixinExtras:${project.mixin_extras}"))
     annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras}")
 
-    // Run PacketLogger with FoldWorld
+    // Run Tools with FoldWorld
     // TODO: fix this, as it works but break builds
-//    modCompileOnly(project(path: ":packet-logger", configuration: "namedElements"))
+    // For now just build tools and put it to mods folder
+//    modLocalRuntime(project(path: ":tools", configuration: "namedElements"))
 }
 
 loom {

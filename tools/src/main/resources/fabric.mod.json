@@ -1,8 +1,8 @@
 {
 	"schemaVersion": 1,
-	"id": "packetlogger",
+	"id": "tools",
 	"version": "${version}",
-	"name": "Packet Logger",
+	"name": "World Fold Tools",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
 		"Me!"
@@ -16,11 +16,11 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "packetlogger.PLMain"
+          "tools.ToolsMain"
 		]
 	},
 	"mixins": [
-		"packetlogger.mixins.json"
+		"tools.mixins.json"
 	],
 	"depends": {
 		"minecraft": "~1.20",

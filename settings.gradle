@@ -10,4 +10,4 @@ pluginManagement {
 }
 
 rootProject.name = "world-fold"
-include("packet-logger", "world-fold")
+include("tools", "world-fold")

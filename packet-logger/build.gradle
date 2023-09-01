@@ -1,3 +1,0 @@
-archivesBaseName = "packetlogger"
-version = project.mod_version
-group = project.maven_group

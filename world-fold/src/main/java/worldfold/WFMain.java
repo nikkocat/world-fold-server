@@ -24,14 +24,15 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 public class WFMain implements ModInitializer {
-    public static final Logger LOGGER = LoggerFactory.getLogger("WorldFold");
+    public static final String MOD_ID = "WorldFold";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static int range = 16;
     // seed: -1998017228203478098
 
     @Override
     public void onInitialize() {
 //        LOGGER.info("This is World Fold. Key words: worldfold, messages begin with (WF:Module)");
-        LOGGER.info("Loading WorldFold");
+        LOGGER.info("Loading " + MOD_ID);
 
         CommandRegistrationCallback.EVENT.register(CommandTree::registerCommands);
         ServerWorldEvents.LOAD.register(this::onWorldLoad);
