@@ -1,13 +1,7 @@
-archivesBaseName = project.archives_base_name
+plugins {
+    id 'java'
+}
+
+archivesBaseName = "packetlogger"
 version = project.mod_version
 group = project.maven_group
-
-java {
-    withSourcesJar()
-}
-
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}"}
-    }
-}

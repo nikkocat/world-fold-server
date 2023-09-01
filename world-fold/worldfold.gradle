@@ -1,3 +1,7 @@
+plugins {
+    id 'java'
+}
+
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
@@ -12,19 +16,11 @@ dependencies {
     annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras}")
 
     // Run PacketLogger with FoldWorld
-    modRuntimeOnly(project(path: ":packet-logger"))
+    modRuntimeOnly(project(path: ":packet-logger")) {
+        transitive = false
+    }
 }
 
 loom {
     accessWidenerPath = file("src/main/resources/worldfold.accesswidener")
-}
-
-java {
-    withSourcesJar()
-}
-
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}"}
-    }
 }
