@@ -16,7 +16,8 @@ dependencies {
     annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras}")
 
     // Run PacketLogger with FoldWorld
-    modRuntimeOnly(project(path: ":packet-logger")) {
+    // For some reason modRuntimeOnly creates issue
+    implementation(project(path: ":packet-logger")) {
         transitive = false
     }
 }
