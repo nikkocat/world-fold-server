@@ -1,4 +1,4 @@
-package nikkocat.worldfold.mixin;
+package worldfold.mixins;
 
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
@@ -6,8 +6,8 @@ import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import nikkocat.worldfold.GenerationUtils;
-import nikkocat.worldfold.access.ChunkGeneratorAccess;
+import worldfold.GenerationUtils;
+import worldfold.access.ChunkGeneratorAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

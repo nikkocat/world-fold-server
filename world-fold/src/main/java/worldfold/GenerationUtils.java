@@ -1,4 +1,4 @@
-package nikkocat.worldfold;
+package worldfold;
 
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;

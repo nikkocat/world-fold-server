@@ -1,4 +1,4 @@
-package nikkocat.worldfold;
+package worldfold;
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;

@@ -8,3 +8,13 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+include(":packet-logger")
+def packetLogger = project(":packet-logger")
+packetLogger.projectDir = file("packet-logger")
+packetLogger.buildFileName = "packetlogger.gradle"
+
+include(":world-fold")
+def worldFold = project(":world-fold")
+worldFold.projectDir = file("world-fold")
+worldFold.buildFileName = "worldfold.gradle"

@@ -1,0 +1,30 @@
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    // MixinExtras.
+    include(implementation("com.github.LlamaLad7:MixinExtras:${project.mixin_extras}"))
+    annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras}")
+
+    // Run PacketLogger with FoldWorld
+    modRuntimeOnly(project(path: ":packet-logger"))
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/worldfold.accesswidener")
+}
+
+java {
+    withSourcesJar()
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
+}

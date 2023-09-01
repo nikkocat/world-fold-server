@@ -1,4 +1,4 @@
-package nikkocat.worldfold;
+package worldfold;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

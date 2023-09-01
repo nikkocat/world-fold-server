@@ -1,4 +1,4 @@
-package nikkocat.worldfold.mixin;
+package worldfold.mixins;
 
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -10,8 +10,8 @@ import net.minecraft.world.gen.carver.CarverContext;
 import net.minecraft.world.gen.carver.CarvingMask;
 import net.minecraft.world.gen.carver.ConfiguredCarver;
 import net.minecraft.world.gen.chunk.AquiferSampler;
-import nikkocat.worldfold.GenerationUtils;
-import nikkocat.worldfold.access.ConfiguredCarverAccess;
+import worldfold.GenerationUtils;
+import worldfold.access.ConfiguredCarverAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

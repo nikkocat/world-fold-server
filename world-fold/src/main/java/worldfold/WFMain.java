@@ -1,4 +1,4 @@
-package nikkocat.worldfold;
+package worldfold;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -25,13 +24,15 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 public class WFMain implements ModInitializer {
-    public static final Logger LOGGER = LoggerFactory.getLogger("WorldFold"); // WF:Server
+    public static final Logger LOGGER = LoggerFactory.getLogger("WorldFold");
     public static int range = 16;
     // seed: -1998017228203478098
 
     @Override
     public void onInitialize() {
 //        LOGGER.info("This is World Fold. Key words: worldfold, messages begin with (WF:Module)");
+        LOGGER.info("Loading WorldFold");
+
         CommandRegistrationCallback.EVENT.register(CommandTree::registerCommands);
         ServerWorldEvents.LOAD.register(this::onWorldLoad);
         ServerTickEvents.START_WORLD_TICK.register(this::onTickBegin);

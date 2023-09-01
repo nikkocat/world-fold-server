@@ -16,18 +16,14 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "nikkocat.worldfold.WFMain"
+			"worldfold.WFMain"
 		],
 		"preLaunch": [
-			"nikkocat.worldfold.WFPre"
+			"worldfold.WFPre"
 		]
 	},
 	"mixins": [
-		"worldfold.mixins.json",
-		{
-			"config": "worldfold.client.mixins.json",
-			"environment": "client"
-		}
+		"worldfold.mixins.json"
 	],
 	"depends": {
 		"minecraft": "~1.20",

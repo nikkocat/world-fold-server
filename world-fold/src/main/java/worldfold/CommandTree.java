@@ -1,4 +1,4 @@
-package nikkocat.worldfold;
+package worldfold;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.block.Block;

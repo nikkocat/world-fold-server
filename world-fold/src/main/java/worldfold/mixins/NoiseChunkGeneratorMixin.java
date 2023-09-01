@@ -1,4 +1,4 @@
-package nikkocat.worldfold.mixin;
+package worldfold.mixins;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -14,8 +14,8 @@ import net.minecraft.world.gen.carver.ConfiguredCarver;
 import net.minecraft.world.gen.chunk.Blender;
 import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
 import net.minecraft.world.gen.noise.NoiseConfig;
-import nikkocat.worldfold.GenerationUtils;
-import nikkocat.worldfold.access.ChunkGeneratorAccess;
+import worldfold.GenerationUtils;
+import worldfold.access.ChunkGeneratorAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

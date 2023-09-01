@@ -1,8 +1,8 @@
-package nikkocat.worldfold.access;
+package worldfold.access;
 
 import net.minecraft.server.world.ServerWorld;
 
-public interface ConfiguredCarverAccess {
+public interface ChunkGeneratorAccess {
     void setWorld(ServerWorld world);
 
     ServerWorld getWorld();
