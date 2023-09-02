@@ -8,6 +8,13 @@ repositories {
 }
 
 dependencies {
+    // Getting packet classes at runtime from classpath
+    implementation 'io.github.classgraph:classgraph:4.8.161'
+
     // Gadget (debugging stuff)
     modLocalRuntime "io.wispforest:gadget:${project.gadget_version}"
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/tools.accesswidener")
 }
