@@ -42,7 +42,12 @@ public class Commands {
                                 }
 
                                 Object args = ctx.getArgument("args", Object.class);
-                                String[] argArray = args.toString().split(" "); // separate args
+
+                                // Smartly separate args
+                                String[] argArray = args.toString().split("\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+                                for (int i = 0; i < argArray.length; i++) {
+                                    argArray[i] = argArray[i].replaceAll("\"", "");
+                                }
 
                                 Packet<?> packet = createPacketInstance(clazz, argArray);
 
