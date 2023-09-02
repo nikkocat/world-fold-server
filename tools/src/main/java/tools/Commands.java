@@ -65,13 +65,15 @@ public class Commands {
 
     public static Packet<?> createPacketInstance(Class<?> clazz, String... args) {
 
+        Class<?>[] parameterTypes = null;
+
         try {
             Constructor<?> constructor = Arrays.stream(clazz.getConstructors())
                     .filter(c -> c.getParameterCount() == args.length)
                     .findAny()
                     .orElseThrow(() -> new NoSuchMethodException("No constructor found with args " + Arrays.toString(args)));
 
-            Class<?>[] parameterTypes = constructor.getParameterTypes();
+            parameterTypes = constructor.getParameterTypes();
 
             List<Object> correctedArgs = tryToFixParameterTypes(parameterTypes, args);
 
@@ -81,8 +83,9 @@ public class Commands {
 
             return (Packet<?>) constructor.newInstance(correctedArgs.toArray());
 
+        } catch (IllegalArgumentException e) {
+            throw new CommandException(Text.literal("Failed to create instance of " + clazz.getSimpleName() + " packet wrong arguments.\nTakes: " + Arrays.toString(parameterTypes) + "\nProvided: " + Arrays.toString(args)).formatted(Formatting.RED));
         } catch (Exception e) {
-//            e.printStackTrace();
             throw new CommandException(Text.literal("Failed to create instance of " + clazz.getSimpleName() + " packet " + e.getMessage().toLowerCase()).formatted(Formatting.RED));
         }
     }
