@@ -23,7 +23,7 @@ public class Commands {
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, List<Class<?>> packetClasses) {
         dispatcher.register(literal("tools").requires(source -> source.hasPermissionLevel(4))
                 .executes(ctx -> {
-                    ctx.getSource().sendFeedback(() -> Text.literal(MOD_ID), false);
+                    ctx.getSource().sendMessage(Text.literal(MOD_ID));
                     return 0;
                 })
         );
@@ -41,10 +41,11 @@ public class Commands {
                                     return 1;
                                 }
 
-                                Object args = ctx.getArgument("args", Object.class);
+                                String args = ctx.getArgument("args", String.class);
 
                                 // Smartly separate args
-                                String[] argArray = args.toString().split("\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+                                // When something is inside "" then we are taking it as one argument even if it has spaces
+                                String[] argArray = args.split("\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
                                 for (int i = 0; i < argArray.length; i++) {
                                     argArray[i] = argArray[i].replaceAll("\"", "");
                                 }

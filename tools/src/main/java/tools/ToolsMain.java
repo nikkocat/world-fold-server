@@ -15,8 +15,6 @@ public class ToolsMain implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Loading " + MOD_ID);
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, access, environment) -> {
-            Commands.registerCommands(dispatcher, Commands.getPackets());
-        });
+        CommandRegistrationCallback.EVENT.register((dispatcher, access, environment) -> Commands.registerCommands(dispatcher, Commands.getPackets()));
     }
 }
