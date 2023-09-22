@@ -85,8 +85,3 @@ subprojects {
 		}
 	}
 }
-
-dependencies {
-    implementation 'org.jooq:joor:0.9.14'
-	implementation 'io.github.classgraph:classgraph:4.8.161'
-}

@@ -3,12 +3,8 @@ version = project.mod_version
 group = project.maven_group
 
 dependencies {
-    implementation 'org.jooq:joor:0.9.14'
-    implementation 'io.github.classgraph:classgraph:4.8.161'
-
     // MixinExtras
-    include(implementation("com.github.LlamaLad7:MixinExtras:${project.mixin_extras}"))
-    annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras}")
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixin_extras}")))
 
     // Run Tools with FoldWorld
     // TODO: fix this, as it works but break builds

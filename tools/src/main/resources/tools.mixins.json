@@ -3,7 +3,6 @@
   "package": "tools.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ClientConnectionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

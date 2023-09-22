@@ -9,10 +9,10 @@ repositories {
 
 dependencies {
     // Getting packet classes at runtime from classpath
-    implementation 'io.github.classgraph:classgraph:4.8.161'
+    include(implementation("io.github.classgraph:classgraph:4.8.161"))
 
     // Gadget (debugging stuff)
-    modLocalRuntime "io.wispforest:gadget:${project.gadget_version}"
+//    modLocalRuntime "io.wispforest:gadget:${project.gadget_version}" // not compatible with 1.20.2 yet
 }
 
 loom {
