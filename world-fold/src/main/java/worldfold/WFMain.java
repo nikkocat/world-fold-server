@@ -26,7 +26,7 @@ import java.util.*;
 public class WFMain implements ModInitializer {
     public static final String MOD_ID = "WorldFold";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static int range = 16;
+    public static int range = 32;
     // seed: -1998017228203478098
 
     @Override
@@ -35,19 +35,18 @@ public class WFMain implements ModInitializer {
         LOGGER.info("Loading " + MOD_ID);
 
         CommandRegistrationCallback.EVENT.register(CommandTree::registerCommands);
-        ServerWorldEvents.LOAD.register(this::onWorldLoad);
         ServerTickEvents.START_WORLD_TICK.register(this::onTickBegin);
         ServerChunkEvents.CHUNK_LOAD.register(this::onChunkLoad);
         ServerChunkEvents.CHUNK_UNLOAD.register(this::onChunkUnload);
-        ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStarted);
+//        ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStarted);
     }
 
-    private void onServerStarted(MinecraftServer server) {
-        LOGGER.info("Attempting to disable spawn chunks...");
-        ServerWorld world = server.getWorld(World.OVERWORLD);
-        ChunkPos chunkPos = new ChunkPos(new BlockPos(world.getLevelProperties().getSpawnX(), 0, world.getLevelProperties().getSpawnZ()));
-        world.getChunkManager().removeTicket(ChunkTicketType.START, chunkPos, 11, Unit.INSTANCE);
-    }
+//    private void onServerStarted(MinecraftServer server) {
+//        LOGGER.info("Attempting to disable spawn chunks...");
+//        ServerWorld world = server.getWorld(World.OVERWORLD);
+//        ChunkPos chunkPos = new ChunkPos(new BlockPos(world.getLevelProperties().getSpawnX(), 0, world.getLevelProperties().getSpawnZ()));
+//        world.getChunkManager().removeTicket(ChunkTicketType.START, chunkPos, 11, Unit.INSTANCE);
+//    }
 
     private void onChunkLoad(ServerWorld world, WorldChunk chunk) {
         LOGGER.info("LOAD: " + chunk.getPos().toString() + " " + chunk.getLevelType().name());
@@ -75,11 +74,6 @@ public class WFMain implements ModInitializer {
                 tpPlayerMovement(world, entity, x, y, z + (blockRange << 1) + 16);
             }
         }
-    }
-
-
-    private void onWorldLoad(MinecraftServer server, ServerWorld world) {
-        LOGGER.info("World loaded: " + world.getRegistryKey().getValue().toString());
     }
 
     private void tpPlayerMovement(ServerWorld world, Entity entity, double x, double y, double z) {

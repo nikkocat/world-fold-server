@@ -1,3 +1,4 @@
 accessWidener   v1	named
 accessible class net/minecraft/server/world/ChunkTicketManager$NearbyChunkTicketUpdater
 accessible class net/minecraft/server/world/ChunkTicketManager$DistanceFromNearestPlayerTracker
+accessible method net/minecraft/server/world/ThreadedAnvilChunkStorage getChunkHolder (J)Lnet/minecraft/server/world/ChunkHolder;
