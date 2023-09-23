@@ -1,100 +1,87 @@
 package worldfold.mixins;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketManager;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
-import net.minecraft.world.SimulationDistanceLevelPropagator;
-import worldfold.WFMain;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
+import worldfold.ChunkUtils;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mixin(ChunkTicketManager.class)
 public abstract class ChunkTicketManagerMixin {
-    @Shadow @Final private SimulationDistanceLevelPropagator simulationDistanceTracker;
-    @Shadow protected abstract int getPlayerSimulationLevel();
-    @Shadow @Final private ChunkTicketManager.NearbyChunkTicketUpdater nearbyChunkTicketUpdater;
-    @Shadow @Final private Long2ObjectMap<ObjectSet<ServerPlayerEntity>> playersByChunkPos;
-    @Shadow @Final private ChunkTicketManager.DistanceFromNearestPlayerTracker distanceFromNearestPlayerTracker;
-
-    // Modify arg
-    // Modify var
-    // Modify const
-
-    private final int range = WFMain.range;
-
-    private static void ticketAdder(ServerWorld world, int radius, int offsetX, int offsetZ) {
-        ChunkPos offsetPos = new ChunkPos(offsetX, offsetZ);
-        world.getChunkManager().addTicket(ChunkTicketType.PLAYER, offsetPos, radius, offsetPos);
-        WFMain.LOGGER.info("ADD: ["+offsetX+", "+offsetZ+"]");
+    @Inject(at = @At("HEAD"), method = "handleChunkEnter")
+    private void chunkEnteredTail(ChunkSectionPos pos, ServerPlayerEntity player, CallbackInfo info) {
+        ChunkPos centerChunkPos = pos.toChunkPos();
+        handleOffsetEnter(centerChunkPos, player);
+    }
+    @Inject(at = @At("HEAD"), method = "handleChunkLeave")
+    private void chunkLeftTail(ChunkSectionPos pos, ServerPlayerEntity player, CallbackInfo info) {
+        ChunkPos centerChunkPos = pos.toChunkPos();
+        handleOffsetLeave(centerChunkPos, player);
     }
 
-    private void handleOffsetEnter(int x, int z, ServerPlayerEntity player) {
-        handleOffset(x, z, player, true);
+    @Unique
+    private static void ticketAdder(ServerPlayerEntity player, ServerWorld world, ChunkPos originalChunkPos) {
+        world.getServer().submit(() -> {
+            ChunkUtils.mimicChunk(player, world, originalChunkPos);
+        });
     }
 
-    private void handleOffsetLeave(int x, int z, ServerPlayerEntity player) {
-        handleOffset(x, z, player, false);
+    @Unique
+    private static void ticketRemover(ServerWorld world, ChunkPos chunkPos) {
+        world.getServer().submit(() -> {
+            world.getChunkManager().removeTicket(ChunkTicketType.FORCED, chunkPos, 0, chunkPos);
+        });
     }
 
-    private void handleOffset(int x, int z, ServerPlayerEntity player, boolean enter) {
+    @Unique
+    private void handleOffset(ChunkPos centerChunkPos, ServerPlayerEntity player, boolean enter) {
         ServerWorld world = (ServerWorld) player.getWorld();
-        int radius = 33 - getPlayerSimulationLevel();
-        int bound = range - radius;
-        int offset = (range << 1) + 1;
-        int offsetX = x;
-        int offsetZ = z;
-        boolean crossX = false;
-        boolean crossZ = false;
+        List<ChunkPos> chunkPosList = new ArrayList<>();
 
-        if (x > bound) {
-            crossX = true;
-            offsetX -= offset;
-        } else if (x < -bound) {
-            crossX = true;
-            offsetX += offset;
+        int radius = 6;
+        int centerX = centerChunkPos.x;
+        int centerZ = centerChunkPos.z;
+
+        // TODO change it lol
+        // its super bad....
+        for (int x = centerX - radius; x <= centerX + radius; x++) {
+            for (int z = centerZ - radius; z <= centerZ + radius; z++) {
+                double distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(z - centerZ, 2));
+                if (distance <= radius) {
+                    chunkPosList.add(new ChunkPos(x, z));
+                }
+            }
         }
 
-        if (z > bound) {
-            crossZ = true;
-            offsetZ -= offset;
-        } else if (z < -bound) {
-            crossZ = true;
-            offsetZ += offset;
+        if (chunkPosList.isEmpty()) {
+            return;
         }
 
-        if (crossX || crossZ) {
+        for (ChunkPos chunkPos : chunkPosList) {
             if (enter) {
-                ticketAdder(world, radius + 1, offsetX, offsetZ);
+                ticketAdder(player, world, chunkPos);
             } else {
-                ticketRemover(world, radius, offsetX, offsetZ);
+//                ticketRemover(world, chunkPos);
             }
         }
     }
 
-
-    private static void ticketRemover(ServerWorld world, int radius, int offsetX, int offsetZ) {
-        ChunkPos offsetPos = new ChunkPos(offsetX, offsetZ);
-        world.getChunkManager().removeTicket(ChunkTicketType.PLAYER, offsetPos, radius, offsetPos);
-        WFMain.LOGGER.info("REMOVE: ["+offsetX+", "+offsetZ+"]");
+    @Unique
+    private void handleOffsetEnter(ChunkPos centerChunkPos, ServerPlayerEntity player) {
+        handleOffset(centerChunkPos, player, true);
     }
 
-    @Inject(at = @At("HEAD"), method = "handleChunkEnter")
-    private void chunkEnteredTail(ChunkSectionPos pos, ServerPlayerEntity player, CallbackInfo info) {
-        ChunkPos oldPos = pos.toChunkPos();
-        handleOffsetEnter(oldPos.x, oldPos.z, player);
-    }
-    @Inject(at = @At("HEAD"), method = "handleChunkLeave")
-    private void chunkLeftTail(ChunkSectionPos pos, ServerPlayerEntity player, CallbackInfo info) {
-        ChunkPos oldPos = pos.toChunkPos();
-        handleOffsetLeave(oldPos.x, oldPos.z, player);
+    @Unique
+    private void handleOffsetLeave(ChunkPos centerChunkPos, ServerPlayerEntity player) {
+        handleOffset(centerChunkPos, player, false);
     }
 }

@@ -3,20 +3,14 @@ package worldfold;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ChunkTicketType;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Unit;
+import net.minecraft.server.world.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +21,7 @@ public class WFMain implements ModInitializer {
     public static final String MOD_ID = "WorldFold";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static int range = 32;
+
     // seed: -1998017228203478098
 
     @Override
@@ -49,11 +44,11 @@ public class WFMain implements ModInitializer {
 //    }
 
     private void onChunkLoad(ServerWorld world, WorldChunk chunk) {
-        LOGGER.info("LOAD: " + chunk.getPos().toString() + " " + chunk.getLevelType().name());
+//        LOGGER.info("LOAD: " + chunk.getPos().toString() + " " + chunk.getLevelType().name());
     }
 
     private void onChunkUnload(ServerWorld world, WorldChunk chunk) {
-        LOGGER.info("UNLOAD: " + chunk.getPos().toString() + " " + chunk.getLevelType().name());
+//        LOGGER.info("UNLOAD: " + chunk.getPos().toString() + " " + chunk.getLevelType().name());
     }
 
     private void onTickBegin(ServerWorld world) {
@@ -93,20 +88,9 @@ public class WFMain implements ModInitializer {
         if (entity.getVehicle() != null) {
             entity.getVehicle().requestTeleport(x, y, z);
         }
+
         if (entity instanceof ServerPlayerEntity player) {
-            // TODO make it fake tp
             player.networkHandler.requestTeleport(x, y, z, f, g, mvFlags);
-
-//            player.setPos(x, y, z);
-//            player.networkHandler.requestTeleport(
-//                    x,
-//                    y,
-//                    z,
-//                    f,
-//                    g
-//            );
-//            player.networkHandler.syncWithPlayerPosition();
-
         }
     }
 }

@@ -17,9 +17,6 @@
 	"entrypoints": {
 		"main": [
 			"worldfold.WFMain"
-		],
-		"preLaunch": [
-			"worldfold.WFPre"
 		]
 	},
 	"mixins": [

@@ -6,7 +6,7 @@ import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import worldfold.GenerationUtils;
+import worldfold.ChunkUtils;
 import worldfold.access.ChunkGeneratorAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +30,7 @@ public class ChunkGeneratorMixin implements ChunkGeneratorAccess {
     private void generateFeatures(StructureWorldAccess world, Chunk chunk, StructureAccessor structureAccessor, CallbackInfo ci, ChunkPos chunkPos) {
         setWorld(world.toServerWorld());
 
-        if (!GenerationUtils.shouldChunkBeGenerated(world.toServerWorld(), chunkPos)) {
+        if (!ChunkUtils.chunkInRange(world.toServerWorld(), chunkPos)) {
             ci.cancel();
         }
     }

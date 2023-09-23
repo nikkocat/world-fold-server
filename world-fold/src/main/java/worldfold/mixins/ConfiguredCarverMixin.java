@@ -10,7 +10,7 @@ import net.minecraft.world.gen.carver.CarverContext;
 import net.minecraft.world.gen.carver.CarvingMask;
 import net.minecraft.world.gen.carver.ConfiguredCarver;
 import net.minecraft.world.gen.chunk.AquiferSampler;
-import worldfold.GenerationUtils;
+import worldfold.ChunkUtils;
 import worldfold.access.ConfiguredCarverAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,7 +35,7 @@ public class ConfiguredCarverMixin implements ConfiguredCarverAccess {
 
     @Inject(method = "carve", at = @At(value = "HEAD"), cancellable = true)
     private void carveMixin(CarverContext context, Chunk chunk, Function<BlockPos, RegistryEntry<Biome>> posToBiome, net.minecraft.util.math.random.Random random, AquiferSampler aquiferSampler, ChunkPos pos, CarvingMask mask, CallbackInfoReturnable<Boolean> cir) {
-        if (!GenerationUtils.shouldChunkBeGenerated(getWorld(), pos)) {
+        if (!ChunkUtils.chunkInRange(getWorld(), pos)) {
             cir.setReturnValue(false);
         }
     }

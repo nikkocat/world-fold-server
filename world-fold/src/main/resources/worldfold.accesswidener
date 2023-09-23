@@ -2,3 +2,7 @@ accessWidener   v1	named
 accessible class net/minecraft/server/world/ChunkTicketManager$NearbyChunkTicketUpdater
 accessible class net/minecraft/server/world/ChunkTicketManager$DistanceFromNearestPlayerTracker
 accessible method net/minecraft/server/world/ThreadedAnvilChunkStorage getChunkHolder (J)Lnet/minecraft/server/world/ChunkHolder;
+accessible field net/minecraft/world/chunk/WorldChunk entityLoader Lnet/minecraft/world/chunk/WorldChunk$EntityLoader;
+accessible field net/minecraft/world/chunk/WorldChunk blockTickScheduler Lnet/minecraft/world/tick/ChunkTickScheduler;
+accessible field net/minecraft/world/chunk/WorldChunk fluidTickScheduler Lnet/minecraft/world/tick/ChunkTickScheduler;
+accessible field net/minecraft/world/chunk/Chunk pos Lnet/minecraft/util/math/ChunkPos;

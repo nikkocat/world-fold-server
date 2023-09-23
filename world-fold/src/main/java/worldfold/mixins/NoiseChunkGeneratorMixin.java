@@ -14,7 +14,7 @@ import net.minecraft.world.gen.carver.ConfiguredCarver;
 import net.minecraft.world.gen.chunk.Blender;
 import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
 import net.minecraft.world.gen.noise.NoiseConfig;
-import worldfold.GenerationUtils;
+import worldfold.ChunkUtils;
 import worldfold.access.ChunkGeneratorAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,7 +35,7 @@ public class NoiseChunkGeneratorMixin {
     @WrapOperation(method = "carve", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/gen/carver/ConfiguredCarver;shouldCarve(Lnet/minecraft/util/math/random/Random;)Z"))
     private boolean carveConditionMixin(ConfiguredCarver<?> instance, Random random, Operation<Boolean> original, ChunkRegion chunkRegion, long seed, NoiseConfig noiseConfig, BiomeAccess biomeAccess, StructureAccessor structureAccessor, Chunk chunk, GenerationStep.Carver carverStep) {
-        if (GenerationUtils.shouldChunkBeGenerated(this.world, chunk.getPos())) {
+        if (ChunkUtils.chunkInRange(this.world, chunk.getPos())) {
             return original.call(instance, random);
         } else {
             return false;
@@ -46,7 +46,7 @@ public class NoiseChunkGeneratorMixin {
     private void buildSurfaceMixin(ChunkRegion region, StructureAccessor structures, NoiseConfig noiseConfig, Chunk chunk, CallbackInfo ci) {
         this.world = region.toServerWorld();
 
-        if (!GenerationUtils.shouldChunkBeGenerated(region.toServerWorld(), chunk.getPos())) {
+        if (!ChunkUtils.chunkInRange(region.toServerWorld(), chunk.getPos())) {
             ci.cancel();
         }
     }
@@ -55,7 +55,7 @@ public class NoiseChunkGeneratorMixin {
             target = "Lnet/minecraft/SharedConstants;isOutsideGenerationArea(Lnet/minecraft/util/math/ChunkPos;)Z"))
     private boolean isOutsideGenerationAreaMixin(ChunkPos chunkPos, Operation<Boolean> original, Blender blender, StructureAccessor structureAccessor, NoiseConfig noiseConfig, Chunk chunk, int minimumCellY, int cellHeight) {
         ServerWorld world = ((ChunkGeneratorAccess) this).getWorld();
-        if (GenerationUtils.shouldChunkBeGenerated(world, chunkPos)) {
+        if (ChunkUtils.chunkInRange(world, chunkPos)) {
             return original.call(chunkPos);
         } else {
             return true;
