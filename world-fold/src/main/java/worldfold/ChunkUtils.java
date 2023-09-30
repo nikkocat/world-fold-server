@@ -5,15 +5,17 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.*;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.WorldChunk;
+import org.jetbrains.annotations.Nullable;
 
 public class ChunkUtils {
 
-    public static boolean chunkInRange(ServerWorld world, ChunkPos pos) {
+    public static boolean chunkInRange(@Nullable World world, ChunkPos pos) {
 
         if (world != null) {
-            if (world.getRegistryKey() != ServerWorld.OVERWORLD) {
+            if (world.getRegistryKey() != World.OVERWORLD) {
                 return true;
             }
         }

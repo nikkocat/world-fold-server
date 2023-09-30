@@ -30,7 +30,7 @@ public class WFMain implements ModInitializer {
         LOGGER.info("Loading " + MOD_ID);
 
         CommandRegistrationCallback.EVENT.register(CommandTree::registerCommands);
-        ServerTickEvents.START_WORLD_TICK.register(this::onTickBegin);
+//        ServerTickEvents.START_WORLD_TICK.register(this::onTickBegin);
         ServerChunkEvents.CHUNK_LOAD.register(this::onChunkLoad);
         ServerChunkEvents.CHUNK_UNLOAD.register(this::onChunkUnload);
 //        ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStarted);
@@ -51,46 +51,46 @@ public class WFMain implements ModInitializer {
 //        LOGGER.info("UNLOAD: " + chunk.getPos().toString() + " " + chunk.getLevelType().name());
     }
 
-    private void onTickBegin(ServerWorld world) {
-        int blockRange = range << 4;
-
-        for (ServerPlayerEntity entity : world.getPlayers()) {
-            double x = entity.getX();
-            double y = entity.getY();
-            double z = entity.getZ();
-
-            if (x >= blockRange + 16) {
-                tpPlayerMovement(world, entity, x - (blockRange << 1) - 16, y, z);
-            } else if (x <= -blockRange) {
-                tpPlayerMovement(world, entity, x + (blockRange << 1) + 16, y, z);
-            } else if (z >= blockRange + 16) {
-                tpPlayerMovement(world, entity, x, y, z - (blockRange << 1) - 16);
-            } else if (z <= -blockRange) {
-                tpPlayerMovement(world, entity, x, y, z + (blockRange << 1) + 16);
-            }
-        }
-    }
-
-    private void tpPlayerMovement(ServerWorld world, Entity entity, double x, double y, double z) {
-        ChunkPos chunkPos = new ChunkPos(new BlockPos((int) x, (int) y, (int) z));
-        float f = MathHelper.wrapDegrees(entity.getYaw());
-        float g = MathHelper.wrapDegrees(entity.getPitch());
-        Set<PositionFlag> mvFlags = EnumSet.of(
-                PositionFlag.X,
-                PositionFlag.Y,
-                PositionFlag.Z,
-                PositionFlag.X_ROT,
-                PositionFlag.Y_ROT
-        );
-        // fallback TP ticket
-        world.getChunkManager().addTicket(ChunkTicketType.POST_TELEPORT, chunkPos, 1, entity.getId());
-        // check if player is riding something
-        if (entity.getVehicle() != null) {
-            entity.getVehicle().requestTeleport(x, y, z);
-        }
-
-        if (entity instanceof ServerPlayerEntity player) {
-            player.networkHandler.requestTeleport(x, y, z, f, g, mvFlags);
-        }
-    }
+//    private void onTickBegin(ServerWorld world) {
+//        int blockRange = range << 4;
+//
+//        for (ServerPlayerEntity entity : world.getPlayers()) {
+//            double x = entity.getX();
+//            double y = entity.getY();
+//            double z = entity.getZ();
+//
+//            if (x >= blockRange + 16) {
+//                tpPlayerMovement(world, entity, x - (blockRange << 1) - 16, y, z);
+//            } else if (x <= -blockRange) {
+//                tpPlayerMovement(world, entity, x + (blockRange << 1) + 16, y, z);
+//            } else if (z >= blockRange + 16) {
+//                tpPlayerMovement(world, entity, x, y, z - (blockRange << 1) - 16);
+//            } else if (z <= -blockRange) {
+//                tpPlayerMovement(world, entity, x, y, z + (blockRange << 1) + 16);
+//            }
+//        }
+//    }
+//
+//    private void tpPlayerMovement(ServerWorld world, Entity entity, double x, double y, double z) {
+//        ChunkPos chunkPos = new ChunkPos(new BlockPos((int) x, (int) y, (int) z));
+//        float f = MathHelper.wrapDegrees(entity.getYaw());
+//        float g = MathHelper.wrapDegrees(entity.getPitch());
+//        Set<PositionFlag> mvFlags = EnumSet.of(
+//                PositionFlag.X,
+//                PositionFlag.Y,
+//                PositionFlag.Z,
+//                PositionFlag.X_ROT,
+//                PositionFlag.Y_ROT
+//        );
+//        // fallback TP ticket
+//        world.getChunkManager().addTicket(ChunkTicketType.POST_TELEPORT, chunkPos, 1, entity.getId());
+//        // check if player is riding something
+//        if (entity.getVehicle() != null) {
+//            entity.getVehicle().requestTeleport(x, y, z);
+//        }
+//
+//        if (entity instanceof ServerPlayerEntity player) {
+//            player.networkHandler.requestTeleport(x, y, z, f, g, mvFlags);
+//        }
+//    }
 }

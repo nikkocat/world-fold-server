@@ -6,3 +6,4 @@ accessible field net/minecraft/world/chunk/WorldChunk entityLoader Lnet/minecraf
 accessible field net/minecraft/world/chunk/WorldChunk blockTickScheduler Lnet/minecraft/world/tick/ChunkTickScheduler;
 accessible field net/minecraft/world/chunk/WorldChunk fluidTickScheduler Lnet/minecraft/world/tick/ChunkTickScheduler;
 accessible field net/minecraft/world/chunk/Chunk pos Lnet/minecraft/util/math/ChunkPos;
+accessible field net/minecraft/world/gen/StructureAccessor world Lnet/minecraft/world/WorldAccess;

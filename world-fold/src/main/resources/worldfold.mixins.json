@@ -3,11 +3,11 @@
   "package": "worldfold.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ChunkGeneratorMixin",
-    "ChunkStatusMixin",
-    "ChunkTicketManagerMixin",
-    "ConfiguredCarverMixin",
-    "NoiseChunkGeneratorMixin"
+    "generation.ChunkGeneratorMixin",
+    "generation.ChunkStatusMixin",
+    "generation.ConfiguredCarverMixin",
+    "generation.NoiseChunkGeneratorMixin",
+    "tickets.ChunkTicketManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

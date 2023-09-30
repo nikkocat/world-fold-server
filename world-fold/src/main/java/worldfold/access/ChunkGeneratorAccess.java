@@ -3,7 +3,7 @@ package worldfold.access;
 import net.minecraft.server.world.ServerWorld;
 
 public interface ChunkGeneratorAccess {
-    void setWorld(ServerWorld world);
+    void world_fold$setWorld(ServerWorld world);
 
-    ServerWorld getWorld();
+    ServerWorld world_fold$getWorld();
 }

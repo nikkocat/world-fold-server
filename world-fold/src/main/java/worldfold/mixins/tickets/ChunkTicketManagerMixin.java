@@ -1,4 +1,4 @@
-package worldfold.mixins;
+package worldfold.mixins.tickets;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketManager;
@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+@Debug(export = true)
 @Mixin(ChunkTicketManager.class)
 public abstract class ChunkTicketManagerMixin {
     @Inject(at = @At("HEAD"), method = "handleChunkEnter")

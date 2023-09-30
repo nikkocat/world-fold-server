@@ -1,4 +1,4 @@
-package worldfold.mixins;
+package worldfold.mixins.generation;
 
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -10,6 +10,7 @@ import net.minecraft.world.gen.carver.CarverContext;
 import net.minecraft.world.gen.carver.CarvingMask;
 import net.minecraft.world.gen.carver.ConfiguredCarver;
 import net.minecraft.world.gen.chunk.AquiferSampler;
+import org.spongepowered.asm.mixin.Unique;
 import worldfold.ChunkUtils;
 import worldfold.access.ConfiguredCarverAccess;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,21 +22,22 @@ import java.util.function.Function;
 
 @Mixin(ConfiguredCarver.class)
 public class ConfiguredCarverMixin implements ConfiguredCarverAccess {
-    ServerWorld serverWorld;
+    @Unique
+    ServerWorld world;
 
     @Override
-    public void setWorld(ServerWorld world) {
-        this.serverWorld = world;
+    public void world_fold$setWorld(ServerWorld world) {
+        this.world = world;
     }
 
     @Override
-    public ServerWorld getWorld() {
-        return this.serverWorld;
+    public ServerWorld world_fold$getWorld() {
+        return this.world;
     }
 
     @Inject(method = "carve", at = @At(value = "HEAD"), cancellable = true)
     private void carveMixin(CarverContext context, Chunk chunk, Function<BlockPos, RegistryEntry<Biome>> posToBiome, net.minecraft.util.math.random.Random random, AquiferSampler aquiferSampler, ChunkPos pos, CarvingMask mask, CallbackInfoReturnable<Boolean> cir) {
-        if (!ChunkUtils.chunkInRange(getWorld(), pos)) {
+        if (!ChunkUtils.chunkInRange(world_fold$getWorld(), pos)) {
             cir.setReturnValue(false);
         }
     }
